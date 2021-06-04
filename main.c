@@ -1,4 +1,8 @@
+#include "resources_def.h"
+#include "stdio.h"
+
 int main()
 {
-  return (0);
+  printf("Hello !\n");
+  return (a);
 }
