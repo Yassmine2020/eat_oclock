@@ -1,30 +1,36 @@
 #ifndef RES_DEF
 # define RES_DEF
-# define STOCK_SIZE 7
+# define TYPE_SIZE 10
+# define RECETTE_SIZE 14
 # include <time.h>
 
-typedef struct product {
+typedef struct produit {
   int id;
-  char *name;
-} t_product;
+  char *nom;  
+  float qte;
+} t_produit;
 
-float stock[STOCK_SIZE][2];
+typedef struct recette_elm {
+  t_produit *produit;
+  float     qte;
+} t_recette_elm;
 
 typedef struct recettes {
   int id;
-  char *name;
-  float liste[STOCK_SIZE][2];
+  char *nom;
+  t_recette_elm elm[TYPE_SIZE];
 } t_recette;
 
 typedef struct repas {
   int id;
-  char *name;
+  char *nom;
   int prix;
+  t_recette *recettes;
 } t_repas;
 
 typedef struct menu {
   int id;
-  int liste_repas[2];
+  t_repas *repas[2];
 } t_menu;
 
 typedef struct commande {
@@ -32,5 +38,14 @@ typedef struct commande {
   int montant;
   int repas[2][2];
   t_time date;
+  t_commande *next;
 } t_commande;
+
+typedef struct db {
+  FILE *produit;
+  FILE *recettes;
+  FILE *repas;
+  FILE *menu;
+  FILE *cmd;
+} t_db;
 #endif
