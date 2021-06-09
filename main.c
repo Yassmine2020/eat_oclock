@@ -28,9 +28,11 @@ void init(void)
 int main(void)
 {
   init();
-  t_produit p = {1, "carottes", 33};
-  char *s;
+  // t_produit p = {1, "carottes", 33};
+  char *s = strdup("1,carottes,33");
+  t_produit p = prod_deserial(s);
 
   s = prod_serial(p);
+  puts(s);
   return (0);
 }
