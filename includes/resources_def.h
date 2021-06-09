@@ -2,17 +2,20 @@
 # define RES_DEF
 # define TYPE_SIZE 10
 # define RECETTE_SIZE 14
-# include <time.h>
+#include <time.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 typedef struct produit {
   int id;
   char *nom;  
-  float qte;
+  int qte;
 } t_produit;
 
 typedef struct recette_elm {
   t_produit *produit;
-  float     qte;
+  int     qte;
 } t_recette_elm;
 
 typedef struct recettes {
@@ -33,19 +36,21 @@ typedef struct menu {
   t_repas *repas[2];
 } t_menu;
 
-typedef struct commande {
+typedef struct commande t_commande;
+
+struct commande {
   int numero;
   int montant;
   int repas[2][2];
-  t_time date;
+  time_t date;
   t_commande *next;
-} t_commande;
+};
 
 typedef struct db {
-  FILE *produit;
+  FILE *produits;
   FILE *recettes;
   FILE *repas;
-  FILE *menu;
-  FILE *cmd;
+  FILE *menus;
+  FILE *cmds;
 } t_db;
 #endif
