@@ -18,11 +18,11 @@ void init(void)
 
   // desérialisation
   // creer ou lire les fichier
-  db.produits = fopen("db/produit", "w+");
-  db.recettes = fopen("db/recette", "w+");
-  db.repas = fopen("db/repas", "w+");
-  db.menus = fopen("db/menu", "w+");
-  db.cmds = fopen("db/cmd", "w+");
+  db.produits = fopen("db/produit", "a+");
+  db.recettes = fopen("db/recette", "a+");
+  db.repas = fopen("db/repas", "a+");
+  db.menus = fopen("db/menu", "a+");
+  db.cmds = fopen("db/cmd", "a+");
 }
 
 int main(void)
@@ -33,6 +33,26 @@ int main(void)
   t_produit p = prod_deserial(s);
 
   s = prod_serial(p);
-  puts(s);
+  // puts(s);
+  creat_product(stock, db.produits, p);
+  creat_product(stock, db.produits, (t_produit){2, "Pommes", 12});
+  creat_product(stock, db.produits, (t_produit){2, "Choux", 56});
+  t_recette rec = (t_recette){1, "Pattes", 10000, {&p, 78, &stock[1], 45, &stock[2], 90}};
+  // t_recette rec;
+  //save_recette(db.recettes, rec);
+  // bzero(&rec, sizeof(t_recette));
+  // rec.id = 1;
+  // rec.nom = "Pattes";
+  // rec.prix = 10000;
+  // rec.elm[0].produit = &p;
+  // rec.elm[0].qte = 23;
+
+  char *line = recette_serial(rec);
+  // puts(line);
+  t_recette rece = recettes_deserial(line, stock);
+  puts(recette_serial(rece));
+  creat_recette(recettes, db.recettes, rece);
+  t_recette reca = (t_recette){2, "Kill", 450, {&p, 8, &stock[1], 44443}};
+  creat_recette(recettes, db.recettes, reca);
   return (0);
 }

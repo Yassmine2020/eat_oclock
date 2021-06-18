@@ -9,7 +9,7 @@
 
 typedef struct produit {
   int id;
-  char *nom;  
+  char *nom; 
   int qte;
 } t_produit;
 
@@ -21,6 +21,7 @@ typedef struct recette_elm {
 typedef struct recettes {
   int id;
   char *nom;
+  int prix;
   t_recette_elm elm[TYPE_SIZE];
 } t_recette;
 
@@ -33,7 +34,7 @@ typedef struct repas {
 
 typedef struct menu {
   int id;
-  t_repas *repas[2];
+  t_recette *recette[2];
 } t_menu;
 
 typedef struct commande t_commande;
@@ -43,7 +44,6 @@ struct commande {
   int montant;
   int repas[2][2];
   time_t date;
-  t_commande *next;
 };
 
 typedef struct db {
@@ -53,4 +53,10 @@ typedef struct db {
   FILE *menus;
   FILE *cmds;
 } t_db;
+
+
+typedef struct elm_cmd {
+  char *name;
+  int qte;
+} t_elem_cmd;
 #endif
