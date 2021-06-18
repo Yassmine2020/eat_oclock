@@ -23,6 +23,7 @@ void init(void)
   db.repas = fopen("db/repas", "a+");
   db.menus = fopen("db/menu", "a+");
   db.cmds = fopen("db/cmd", "a+");
+  db.list = fopen("db/list", "a+");
 }
 
 int main(void)
@@ -31,13 +32,13 @@ int main(void)
   // t_produit p = {1, "carottes", 33};
   char *s = strdup("1,carottes,33");
   t_produit p = prod_deserial(s);
-
+  t_produit p2 = {2, "Pommes", 12};
   s = prod_serial(p);
   // puts(s);
-  creat_product(stock, db.produits, p);
-  creat_product(stock, db.produits, (t_produit){2, "Pommes", 12});
-  creat_product(stock, db.produits, (t_produit){2, "Choux", 56});
-  t_recette rec = (t_recette){1, "Pattes", 10000, {&p, 78, &stock[1], 45, &stock[2], 90}};
+ // creat_product(stock, db.produits, p);
+ // creat_product(stock, db.produits, (t_produit){2, "Pommes", 12});
+ // creat_product(stock, db.produits, (t_produit){2, "Choux", 56});
+  //t_recette rec = (t_recette){1, "Pattes", 10000, {&p, 78, &stock[1], 45, &stock[2], 90}};
   // t_recette rec;
   //save_recette(db.recettes, rec);
   // bzero(&rec, sizeof(t_recette));
@@ -47,12 +48,23 @@ int main(void)
   // rec.elm[0].produit = &p;
   // rec.elm[0].qte = 23;
 
-  char *line = recette_serial(rec);
+  //char *line = recette_serial(rec);
   // puts(line);
-  t_recette rece = recettes_deserial(line, stock);
-  puts(recette_serial(rece));
-  creat_recette(recettes, db.recettes, rece);
-  t_recette reca = (t_recette){2, "Kill", 450, {&p, 8, &stock[1], 44443}};
-  creat_recette(recettes, db.recettes, reca);
+ // t_recette rece = recettes_deserial(line, stock);
+ // puts(recette_serial(rece));
+  //creat_recette(recettes, db.recettes, rece);
+  //t_recette reca = (t_recette){2, "Kill", 450, {&p, 8, &stock[1], 44443}};
+  //creat_recette(recettes, db.recettes, reca);
+  /*stock[0] = (t_produit){1, "Kill", 450};
+  stock[1] = (t_produit){2, "KilL me", 40};
+  stock[2] = (t_produit){3, "KilL me please", 0};
+  produits_manquant(stock);*/
+
+t_recette_elm liste_prod[2];
+ liste_prod[0] = (t_recette_elm){&p, 10};
+ stock[0] = p;
+ liste_prod[1]=(t_recette_elm){&p2, 221};
+ stock[1] = p2;
+ update_stock(liste_prod, db.list);
   return (0);
 }

@@ -2,6 +2,7 @@
 # define RES_DEF
 # define TYPE_SIZE 10
 # define RECETTE_SIZE 14
+# define TAUX_MINIMALE 100
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,7 +27,6 @@ typedef struct recettes {
 } t_recette;
 
 typedef struct repas {
-  int id;
   char *nom;
   int prix;
   t_recette *recettes;
@@ -52,11 +52,11 @@ typedef struct db {
   FILE *repas;
   FILE *menus;
   FILE *cmds;
+  FILE *list;
 } t_db;
 
-
-typedef struct elm_cmd {
-  char *name;
+typedef struct items {
+  char *nom ;
   int qte;
-} t_elem_cmd;
+} t_items;
 #endif

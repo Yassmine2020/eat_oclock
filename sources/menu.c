@@ -7,7 +7,7 @@ char *menu_serial(t_menu menu)
   int i;
   char *repas;
   char *tmp;    //variable temporaire
-  int len;
+  size_t len;
 
   tmp = malloc(countD(menu.id) + 1);
   len = sprintf(tmp, "%d", menu.id);
@@ -17,8 +17,39 @@ char *menu_serial(t_menu menu)
     len = sprintf(repas, "%s,%s-%d", tmp, menu.recette[i]->nom,
     menu.recette[i]->prix);
     free(tmp);
-    tmp = repas;
   }
-  return(tmp);
+  return(repas);
+}
+
+void save_menu(FILE *path, t_menu menu)
+{
+  char *result;
+
+  result = menu_serial(menu);
+  fprintf(path,"%s\n", result);
+}
+
+t_menu menus_deserial(char *line )
+{
+  t_menu menus;
+  char *token;
+  char *ptr;
+  int i = 0;
+  bzero(&menus, sizeof(t_menu));
+  if (line == NULL)
+    return(menus);
+  token = strtok(strdup(line), ",");
+  menus.id = atoi(token);
+  while((token = strtok(NULL, ",")) && i < 2)
+  {
+    if (!(ptr = strchr(token, '-')))
+      break ;
+    *ptr = 0; // on separe les deux chaines
+    puts(token);
+    menu.recette[i]->nom =  token;
+    menu.recette[i]->prix = atoi(ptr + 1); 
+    i++;
+  }
+  return (menus);
 }
 

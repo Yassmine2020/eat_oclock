@@ -20,7 +20,7 @@ char *recette_serial(t_recette recette)
     buf = malloc(len + strlen(recette.elm[i].produit->nom) +
     countD(recette.elm[i].produit->qte) + 3);
     len = sprintf(buf, "%s,%s-%d", tmp, recette.elm[i]
-    .produit->nom, recette.elm[i].qte);
+    .produit->nom, recette.elm[i].qte);   
     free(tmp);
     tmp = buf;
   }
@@ -80,6 +80,32 @@ void creat_recette(t_recette *recettes, FILE *fichier, t_recette rec)
       break;
     }
   }
+}
+
+int verif_rece(t_recette_elm *elm)
+{
+  int i;
+
+  for (i = 0; i < TYPE_SIZE; i++) 
+  {
+    if (elm[i].produit == NULL)
+      break;
+    if (elm[i].produit->qte < elm[i].qte)
+      return (0);
+  }
+  return(1);
+}
+
+t_recette *find_recette(t_recette *recette, char *nom_rec)
+{
+  int i;
+
+  for(i = 0; i < RECETTE_SIZE; i++)
+  {
+    if (strcmp(nom_rec, recette[i].nom) == 0) 
+      return (&recette[i]);
+  }
+  return (NULL);
 }
 // void create_recette(t_recette *tab, FILE *fichier, t_recette recette)
 // {
