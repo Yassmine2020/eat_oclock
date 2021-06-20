@@ -1,6 +1,10 @@
 #include "resources_def.h"
 #include "prototypes.h"
 
+t_produit stock[TYPE_SIZE];
+t_recette recettes[RECETTE_SIZE];
+t_db      db;
+
 char *recette_serial(t_recette recette)
 {
   int i;
@@ -36,7 +40,7 @@ void save_recette(FILE *path, t_recette recette)
   fprintf(path,"%s\n", result);
 }
 
-t_recette recettes_deserial(char *line, t_produit *prods)
+t_recette recettes_deserial(char *line)
 {
   t_recette  recette;
   char *token;
@@ -58,8 +62,8 @@ t_recette recettes_deserial(char *line, t_produit *prods)
     if (!(ptr = strchr(token, '-')))
       break ;
     *ptr = 0; // on separe les deux chaines
-    puts(token);
-    recette.elm[i].produit = find_prod(prods, token);
+    // puts(token);
+    recette.elm[i].produit = find_prod(token);
     recette.elm[i].qte = atoi(ptr + 1); 
     i++;
   }
@@ -70,12 +74,12 @@ void creat_recette(t_recette *recettes, FILE *fichier, t_recette rec)
 {
   int i;
 
+  fseek(fichier, 0, SEEK_CUR);
   for(i = 0; i < RECETTE_SIZE; i++)
   {
     if (recettes[i].nom == NULL)
     {
       recettes[i] = rec;
-      fseek(fichier, 0, SEEK_CUR);
       fprintf(fichier, "%s\n", recette_serial(recettes[i]));
       break;
     }
@@ -96,16 +100,62 @@ int verif_rece(t_recette_elm *elm)
   return(1);
 }
 
-t_recette *find_recette(t_recette *recette, char *nom_rec)
+t_recette *find_recette(char *nom_rec)
 {
   int i;
 
-  for(i = 0; i < RECETTE_SIZE; i++)
+  if (nom_rec == NULL)
+    return (NULL);
+  for (i = 0; i < RECETTE_SIZE; i++)
   {
-    if (strcmp(nom_rec, recette[i].nom) == 0) 
-      return (&recette[i]);
+    // printf("[%s] [%s]", recettes[i].nom, nom_rec);
+    if (recettes[i].nom != NULL && strcmp(nom_rec, recettes[i].nom) == 0) 
+      return (&recettes[i]);
   }
   return (NULL);
+}
+
+void ingredients(t_recette rec)
+{
+  int i;
+  for (i = 0; i <TYPE_SIZE; i++ )
+  printf("%s,%d",rec.elm[i].produit->nom,rec.elm[i].qte);
+}
+
+void restore_recette(void)
+{
+  char *line = NULL;
+  size_t  n = 0;
+  t_recette rec;
+  int i = 0;
+
+  bzero(&rec, sizeof(t_recette));
+  while (getline(&line, &n, db.recettes) > 1) {
+    rec = recettes_deserial(line);
+    if (find_recette(rec.nom) == NULL)
+      recettes[i++] = rec;
+    if (i == RECETTE_SIZE)
+      break ;
+    free(line);
+    n = 0;
+  }
+}
+
+void afficher_recette(void)
+{
+  char *line = NULL;
+  size_t  n = 0;
+  // t_recette rec;
+
+  fseek(db.recettes, 0, SEEK_SET);
+  puts("================== Recettes ==================");
+  while (getline(&line, &n, db.recettes) > 1) {
+    // rec = recettes_deserial(line);
+    printf("%s", line);
+    free(line);
+    n = 0;
+  }
+  puts("==============================================");
 }
 // void create_recette(t_recette *tab, FILE *fichier, t_recette recette)
 // {
